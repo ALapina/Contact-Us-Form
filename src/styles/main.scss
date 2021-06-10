@@ -119,14 +119,16 @@ select {
   background-position: right 0.5em center;
 }
 
-input[type="checkbox"],
-input[type="radio"],
-input[type="submit"],
-input[type="button"] {
-  width: auto;
-  height: auto;
+input[type="checkbox"] {
+  // width: auto;
+  // height: auto;
   margin-top: 3px;
   padding: 0;
+
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  cursor: pointer;
 }
 
 .contact-form {
@@ -135,6 +137,20 @@ input[type="button"] {
 
   font-size: 16px;
   line-height: 24px;
+
+  .checkboxes label {
+    opacity: 0.8;
+  }
+
+  .checkboxes__div {
+    // display: flex;
+    // align-items: flex-start;
+  }
+
+  a {
+    color: $deep-red;
+    text-decoration: none;
+  }
 
   &__block {
     margin-bottom: 40px;
