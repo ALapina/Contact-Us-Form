@@ -1,0 +1,15 @@
+$primary-background: #22304f;
+$white: #ffffff;
+$deep-red: #de3c4b;
+
+@mixin mobile-L-425 {
+  @media screen and (max-width: 425px) {
+    @content;
+  }
+}
+
+@mixin Tablet-768 {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
