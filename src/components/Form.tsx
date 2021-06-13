@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -5,44 +7,18 @@ import * as yup from "yup";
 import InputText from "./InputText";
 import InputCheckbox from "./InputCheckbox";
 import Select from "./Select";
+import SelectCountry from "./SelectCountry";
 
-enum IndustryEnum {
-  automotive = "automotive",
-  banking = "banking",
-  consulting = "consulting",
-  finance = "finance",
-  healthcare = "healthcare",
-  mediaPR = "mediaPR",
-  retail = "retail",
-  technology = "technology",
-  telecommunication = "telecommunication",
-  other = "other",
-}
+import {
+  IndustryEnum,
+  IndustryOptions,
+  operatingGeographyEnum,
+  operatingGeographyOptions,
+} from "../selectOptions";
 
-const IndustryOptions = {
-  [IndustryEnum.automotive]: "Automotive",
-  [IndustryEnum.banking]: "Banking",
-  [IndustryEnum.consulting]: "Consulting",
-  [IndustryEnum.finance]: "Finance",
-  [IndustryEnum.healthcare]: "Healthcare",
-  [IndustryEnum.mediaPR]: "Media/PR",
-  [IndustryEnum.retail]: "Retail",
-  [IndustryEnum.technology]: "Technology",
-  [IndustryEnum.telecommunication]: "Telecommunication",
-  [IndustryEnum.other]: "Other",
-};
+import { renderCountryFlag } from "../utils";
 
-enum operatingGeographyEnum {
-  national = "national",
-  regional = "regional",
-  global = "global",
-}
-
-const operatingGeographyOptions = {
-  [operatingGeographyEnum.national]: "National",
-  [operatingGeographyEnum.regional]: "Regional",
-  [operatingGeographyEnum.global]: "Global",
-};
+type countriesType = { name: string; flag: string; alpha3Code: string };
 
 type FormValues = {
   firstName: string;
@@ -50,12 +26,26 @@ type FormValues = {
   email: string;
   jobTitle: string;
   company: string;
-  industry: IndustryEnum;
-  country: string;
-  operatingGeography: operatingGeographyEnum;
+  industry: IndustryEnum | string;
+  operatingGeography: operatingGeographyEnum | string;
   comments: string;
   privacyPolicy: boolean;
   newsletter: boolean;
+  country: countriesType | any;
+};
+
+const formDefaultValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  jobTitle: "",
+  company: "",
+  industry: "",
+  operatingGeography: "",
+  comments: "",
+  privacyPolicy: false,
+  newsletter: false,
+  country: "",
 };
 
 const validationSchema = yup.object().shape({
@@ -67,103 +57,111 @@ const validationSchema = yup.object().shape({
     .required(),
   company: yup.string().trim().required(),
   industry: yup.string().trim().required(),
-  // country: yup.string().trim().required(),
+  country: yup.object().required(),
   privacyPolicy: yup.boolean().oneOf([true]),
 });
 
 const Form = () => {
-  const { register, watch, handleSubmit, formState } = useForm<FormValues>({
-    mode: "onChange",
-    resolver: yupResolver(validationSchema),
-  });
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [countries, setCountries] = useState<Array<countriesType>>([]);
+  const { register, handleSubmit, reset, control, formState } =
+    useForm<FormValues>({
+      mode: "onChange",
+      resolver: yupResolver(validationSchema),
+      defaultValues: formDefaultValues,
+    });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+  async function loadCountries() {
+    setLoading(true);
+    const response = await fetch(
+      "https://restcountries.eu/rest/v2/all?fields=name;alpha3Code;flag"
+    );
+    const countries = await response.json();
+    setCountries(countries);
+    setLoading(false);
+  }
 
-  const { isValid } = formState;
+  useEffect(() => {
+    loadCountries();
+  }, []);
 
-  console.log(watch());
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset();
+    }
+  }, [formState, reset]);
 
-  // console.log(IndustryOptions);
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    data.country = data.country.alpha3Code;
+    console.log(data);
+  };
+
+  // console.log(watch());
 
   return (
     <div className="contact-form">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="contact-form__block">
-          <InputText
-            id={"firstName"}
-            text={"First name"}
-            isRequired={true}
-            register={register}
-          />
-          {/* {errors.firstName && <span>This field is required</span>} */}
-          <InputText
-            id={"lastName"}
-            text={"Last name"}
-            isRequired={false}
-            register={register}
-          />
-          <InputText
-            id={"email"}
-            text={"Email"}
-            isRequired={true}
-            register={register}
-          />
-          <InputText
-            id={"jobTitle"}
-            text={"Job title"}
-            isRequired={false}
-            register={register}
-          />
+        <div className="contact-form__form-block">
+          <InputText id={"firstName"} isRequired={true} register={register}>
+            First name
+          </InputText>
+          <InputText id={"lastName"} isRequired={false} register={register}>
+            Last name
+          </InputText>
+          <InputText id={"email"} isRequired={true} register={register}>
+            Email
+          </InputText>
+          <InputText id={"jobTitle"} isRequired={false} register={register}>
+            Job title
+          </InputText>
         </div>
 
-        <div className="contact-form__block">
-          <InputText
-            id={"company"}
-            text={"Company"}
-            isRequired={true}
-            register={register}
-          />
+        <div className="contact-form__form-block">
+          <InputText id={"company"} isRequired={true} register={register}>
+            Company
+          </InputText>
           <Select
             id={"industry"}
-            text={"Industry"}
             isRequired={true}
             register={register}
-            options={IndustryOptions}
-          />
+            options={IndustryOptions}>
+            Industry
+          </Select>
 
-          <div>
-            <label htmlFor="country">Country*</label>
-            <select name="country" id="country" required defaultValue="N/A">
-              <option value="N/A" disabled hidden>
-                N/A
-              </option>
-              <option value="estonia">Estonia</option>
-              <option value="russia">Russia</option>
-              <option value="france">France</option>
-            </select>
-          </div>
+          <SelectCountry
+            id="country"
+            control={control}
+            isLoading={isLoading}
+            options={countries}
+            optionValue={"alpha3Code"}
+            isRequired={true}
+            formatOptionLabel={renderCountryFlag}>
+            Country
+          </SelectCountry>
 
           <Select
             id={"operatingGeography"}
-            text={"Operating geography"}
             isRequired={false}
             register={register}
-            options={operatingGeographyOptions}
-          />
+            options={operatingGeographyOptions}>
+            Operating geography
+          </Select>
         </div>
 
         <div>
           <label htmlFor="comments">What would you like to talk about?</label>
-          <textarea name="comments" id="comments"></textarea>
+          <textarea
+            className="contact-form__textarea"
+            name="comments"
+            id="comments"></textarea>
         </div>
 
-        <div className="contact-form__block">
-          <div className="checkboxes">
+        <div className="contact-form__form-block">
+          <div>
             <InputCheckbox
               id={"privacyPolicy"}
               isRequired={true}
-              register={register}
-            >
+              register={register}>
               By submitting this form I accept{" "}
               <a href="https://www.modularbank.co/privacy-policy/">
                 privacy policy and cookie policy
@@ -174,21 +172,17 @@ const Form = () => {
             <InputCheckbox
               id={"newsletter"}
               isRequired={false}
-              register={register}
-            >
+              register={register}>
               I would like to receive your newsletter.
             </InputCheckbox>
           </div>
 
-          <div className="contact-form__submit-button-wrapper">
-            <button
-              className="contact-form__submit-button"
-              type="submit"
-              disabled={!isValid}
-            >
-              Send
-            </button>
-          </div>
+          <button
+            className="contact-form__submit-button"
+            type="submit"
+            disabled={!formState.isValid}>
+            Send
+          </button>
         </div>
       </form>
     </div>

@@ -13,9 +13,14 @@
     "@types/react-dom": "^17.0.6",
     "node-sass": "^6.0.0",
     "react": "^17.0.2",
+    "react-country-region-selector": "^3.1.0",
     "react-dom": "^17.0.2",
+    "react-flags-select": "^2.1.2",
     "react-hook-form": "^7.8.3",
+    "react-icons": "^4.2.0",
     "react-scripts": "4.0.3",
+    "react-select": "^4.3.1",
+    "react-select-country-list": "^2.2.3",
     "typescript": "^4.3.2",
     "web-vitals": "^1.1.2",
     "yup": "^0.32.9"
@@ -44,5 +49,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "/Contact-Us-Form"
+  "homepage": "/Contact-Us-Form",
+  "devDependencies": {
+    "@types/react-select": "^4.0.15"
+  }
 }

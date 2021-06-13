@@ -1,39 +1,45 @@
+import { renderAsterisk } from "../utils";
+
 type SelectProps = {
   id: string;
-  text: string;
   isRequired: boolean;
-  register: any;
+  register: Function;
   options: object;
+  children: React.ReactNode;
 };
 
-const Select = ({ id, text, isRequired, register, options }: SelectProps) => {
-  const renderAsterisk = () => {
-    return isRequired && <span aria-hidden="true">*</span>;
-  };
+const renderOptions = (options: object) => {
+  let element = [];
+  for (const [key, value] of Object.entries(options)) {
+    element.push(
+      <option value={key} key={key}>
+        {value}
+      </option>
+    );
+  }
+  return element;
+};
 
-  const renderOptions = () => {
-    let element = [];
-
-    for (const [key, value] of Object.entries(options)) {
-      element.push(
-        <option className="option" value={key} key={key}>
-          {value}
-        </option>
-      );
-    }
-
-    return element;
-  };
-
+const Select = ({
+  id,
+  children,
+  isRequired,
+  register,
+  options,
+}: SelectProps) => {
   return (
     <div>
       <label htmlFor={id}>
-        {text}
-        {renderAsterisk()}
+        {children}
+        {renderAsterisk(isRequired)}
       </label>
-      <select {...register(id)} id={id} required={isRequired}>
+      <select
+        className="contact-form__select"
+        id={id}
+        required={isRequired}
+        {...register(id)}>
         <option value="" label="N/A" hidden />
-        {renderOptions()}
+        {renderOptions(options)}
       </select>
     </div>
   );

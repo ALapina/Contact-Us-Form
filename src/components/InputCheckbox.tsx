@@ -2,7 +2,7 @@ type InputCheckboxProps = {
   id: string;
   isRequired: boolean;
   register: any;
-  children: any;
+  children: React.ReactNode;
 };
 
 const InputCheckbox = ({
@@ -12,7 +12,7 @@ const InputCheckbox = ({
   register,
 }: InputCheckboxProps) => {
   return (
-    <div className="checkboxes__div">
+    <div className="contact-form__checkbox">
       <input type="checkbox" {...register(id)} id={id} required={isRequired} />
       <label htmlFor={id}>{children}</label>
     </div>

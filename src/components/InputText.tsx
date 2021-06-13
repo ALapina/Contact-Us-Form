@@ -1,22 +1,26 @@
+import { renderAsterisk } from "../utils";
+
 type InputTextProps = {
   id: string;
-  text: string;
   isRequired: boolean;
-  register: any;
+  register: Function;
+  children: React.ReactNode;
 };
 
-const InputText = ({ id, text, isRequired, register }: InputTextProps) => {
-  const renderAsterisk = () => {
-    return isRequired && <span aria-hidden="true">*</span>;
-  };
-
+const InputText = ({ id, isRequired, register, children }: InputTextProps) => {
   return (
     <div>
       <label htmlFor={id}>
-        {text}
-        {renderAsterisk()}
+        {children}
+        {renderAsterisk(isRequired)}
       </label>
-      <input type="text" {...register(id)} id={id} required={isRequired} />
+      <input
+        className="contact-form__input"
+        type="text"
+        id={id}
+        required={isRequired}
+        {...register(id)}
+      />
     </div>
   );
 };
