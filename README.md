@@ -1,5 +1,7 @@
 # Contact Us Form
 
+![](./doc_images/form-screenshot.png)
+
 ## 🔗 Live Link / Demo Link:
 
 - https://alapina.github.io/Contact-Us-Form/
@@ -27,7 +29,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `build` folder.
 
 ## Project Styling
 
@@ -74,3 +76,14 @@ The other option that I considered and with which I went in the end - is to fetc
 1. Smaller build size compared to previously checked libraries
 2. Fetching the country list is async and user is not blocked to start filling the form
 3. React-select comes with autocomplete, which allows user to search the country rather than selecting it by scrolling
+
+## Performance Analysis
+
+I was curious how my application performs so I did analysis using these tools:
+
+1. First is taking time to read about bundle size of each library. One of the reason to choose ReactHookForm over Formik was exactly library size
+2. Using VS code extension [Import Cost](https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost) to see in real time when I importing the library how much it costs
+3. Google Lighthouse report ![](./doc_images/lighthouse-report.png)
+4. [Source Map Explorer](https://github.com/danvk/source-map-explorer) as recommended by CreateReactApp documentation
+
+In the end I am pretty happy with the result scores in all these tools. There is a lot to learn about performance field for me and mentioned tool are definitely now part of my professional toolbelt.
