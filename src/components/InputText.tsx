@@ -14,13 +14,7 @@ const InputText = ({ id, isRequired, register, children }: InputTextProps) => {
         {children}
         {renderAsterisk(isRequired)}
       </label>
-      <input
-        className="contact-form__input"
-        type="text"
-        id={id}
-        required={isRequired}
-        {...register(id)}
-      />
+      <input className="contact-form__input" type="text" id={id} required={isRequired} {...register(id)} />
     </div>
   );
 };

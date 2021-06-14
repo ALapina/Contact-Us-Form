@@ -1,6 +1,20 @@
-# Getting Started with Create React App
+# Contact Us Form
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🔗 Live Link / Demo Link:
+
+- https://alapina.github.io/Contact-Us-Form/
+
+## 🛠 Technologies Used:
+
+- [SCSS](https://www.npmjs.com/package/sass-node)
+- TypeSript
+- React
+- [React Hook Form](https://react-hook-form.com/)
+- [Yup](https://github.com/jquense/yup) for form validation
+- [React-Select](https://react-select.com/home)
+- [REST API](https://restcountries.eu/) with list of countries and flags
+- [Create React app](https://create-react-app.dev)
+- [GitHub action](https://github.com/JamesIves/github-pages-deploy-action) for automatically build and deploy project to GitHub pages.
 
 ## Available Scripts
 
@@ -11,36 +25,52 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Project Styling
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+I was choosing between Styled-components and SCSS for this project and decided to go with SCSS approach based on these reasons:
 
-### `npm run eject`
+1. The final styles file have smaller size
+2. The biggest benefit of having styles scoped for each component with Styled-components seemed like too much for a contact form page
+3. Styles-components require more setup steps and adds additional wrapper around each React component
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Create React App
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+For development and final build I chose to use CreateReactApp based on these points:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+1. I could concentrate on the logic, rather than on configuring my own Webpack build
+2. CreateReactApp already use webpack, Babel, ESLint, and others under the hood.
+3. And it's already includes a lot of optimizations that I would otherwise had to investigate and add myself
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Also I'm using [GitHub action](https://github.com/JamesIves/github-pages-deploy-action) for easy no sweat automatically build and deploy project to GitHub pages
 
-## Learn More
+## React Hook Form
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+One of the core pieces of this project is handling the form. I already used [Formik](https://formik.org/) in the past project, but after analyzing the size of the library, decided to go with the next popular choice - [React Hook Form](https://react-hook-form.com/). Strong sides of this library:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Small size of the library
+2. Does not depend on other libraries except React
+3. Plays nice with Yup validation schema
+4. Strong accessibility support
+5. Easy to follow documentation that allowed me to use the library quite fast without prior experience with it
+
+## Country Input with React Select
+
+The contact form have a requirement that country input needs to show country flag for better user experience. I think that was one of the most challenging parts of the project:
+
+- It is hard to style the browser native select input
+- Native select option can only contain text
+
+I investigated a few popular NPM packages for this feature:
+
+1. [react-country-region-selector](https://www.npmjs.com/package/react-country-region-selector) - good lightweight selector with counties, but there is no flag information in the options
+2. [react-flags-select](https://www.npmjs.com/package/react-flags-select) - Ready to use country select component, but the size of the library is huge ~1.8mb
+
+The other option that I considered and with which I went in the end - is to fetch country list with flags from the open [REST API](https://restcountries.eu/) and use [React-Select](https://react-select.com/home) to display this information. The advantages of this approach:
+
+1. Smaller build size compared to previously checked libraries
+2. Fetching the country list is async and user is not blocked to start filling the form
+3. React-select comes with autocomplete, which allows user to search the country rather than selecting it by scrolling

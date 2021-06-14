@@ -61,6 +61,8 @@ a {
 
 .contact-info {
   font-size: 1.5rem;
+  grid-column: 1;
+  grid-row: 2;
 
   &__paragraph {
     margin-bottom: 30px;
@@ -69,6 +71,7 @@ a {
 
 .contact-form {
   font-size: 1rem;
+  grid-column: 2;
 
   &__form-block {
     display: grid;
@@ -130,6 +133,11 @@ a {
     &__menu {
       color: $dark-grey-text;
     }
+  }
+
+  .country-flag {
+    width: 20px;
+    padding-right: 5px;
   }
 
   &__textarea {

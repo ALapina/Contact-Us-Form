@@ -5,12 +5,7 @@ type InputCheckboxProps = {
   children: React.ReactNode;
 };
 
-const InputCheckbox = ({
-  id,
-  children,
-  isRequired,
-  register,
-}: InputCheckboxProps) => {
+const InputCheckbox = ({ id, children, isRequired, register }: InputCheckboxProps) => {
   return (
     <div className="contact-form__checkbox">
       <input type="checkbox" {...register(id)} id={id} required={isRequired} />

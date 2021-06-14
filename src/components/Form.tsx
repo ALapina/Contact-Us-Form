@@ -9,12 +9,7 @@ import InputCheckbox from "./InputCheckbox";
 import Select from "./Select";
 import SelectCountry from "./SelectCountry";
 
-import {
-  IndustryEnum,
-  IndustryOptions,
-  operatingGeographyEnum,
-  operatingGeographyOptions,
-} from "../selectOptions";
+import { IndustryEnum, IndustryOptions, operatingGeographyEnum, operatingGeographyOptions } from "../selectOptions";
 
 import { renderCountryFlag } from "../utils";
 
@@ -64,18 +59,15 @@ const validationSchema = yup.object().shape({
 const Form = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [countries, setCountries] = useState<Array<countriesType>>([]);
-  const { register, handleSubmit, reset, control, formState } =
-    useForm<FormValues>({
-      mode: "onChange",
-      resolver: yupResolver(validationSchema),
-      defaultValues: formDefaultValues,
-    });
+  const { register, handleSubmit, reset, control, formState } = useForm<FormValues>({
+    mode: "onChange",
+    resolver: yupResolver(validationSchema),
+    defaultValues: formDefaultValues,
+  });
 
   async function loadCountries() {
     setLoading(true);
-    const response = await fetch(
-      "https://restcountries.eu/rest/v2/all?fields=name;alpha3Code;flag"
-    );
+    const response = await fetch("https://restcountries.eu/rest/v2/all?fields=name;alpha3Code;flag");
     const countries = await response.json();
     setCountries(countries);
     setLoading(false);
@@ -93,10 +85,7 @@ const Form = () => {
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     data.country = data.country.alpha3Code;
-    console.log(data);
   };
-
-  // console.log(watch());
 
   return (
     <div className="contact-form">
@@ -120,11 +109,7 @@ const Form = () => {
           <InputText id={"company"} isRequired={true} register={register}>
             Company
           </InputText>
-          <Select
-            id={"industry"}
-            isRequired={true}
-            register={register}
-            options={IndustryOptions}>
+          <Select id={"industry"} isRequired={true} register={register} options={IndustryOptions}>
             Industry
           </Select>
 
@@ -139,48 +124,29 @@ const Form = () => {
             Country
           </SelectCountry>
 
-          <Select
-            id={"operatingGeography"}
-            isRequired={false}
-            register={register}
-            options={operatingGeographyOptions}>
+          <Select id={"operatingGeography"} isRequired={false} register={register} options={operatingGeographyOptions}>
             Operating geography
           </Select>
         </div>
 
         <div>
           <label htmlFor="comments">What would you like to talk about?</label>
-          <textarea
-            className="contact-form__textarea"
-            name="comments"
-            id="comments"></textarea>
+          <textarea className="contact-form__textarea" name="comments" id="comments"></textarea>
         </div>
 
         <div className="contact-form__form-block">
           <div>
-            <InputCheckbox
-              id={"privacyPolicy"}
-              isRequired={true}
-              register={register}>
+            <InputCheckbox id={"privacyPolicy"} isRequired={true} register={register}>
               By submitting this form I accept{" "}
-              <a href="https://www.modularbank.co/privacy-policy/">
-                privacy policy and cookie policy
-              </a>
-              .
+              <a href="https://www.modularbank.co/privacy-policy/">privacy policy and cookie policy</a>.
             </InputCheckbox>
 
-            <InputCheckbox
-              id={"newsletter"}
-              isRequired={false}
-              register={register}>
+            <InputCheckbox id={"newsletter"} isRequired={false} register={register}>
               I would like to receive your newsletter.
             </InputCheckbox>
           </div>
 
-          <button
-            className="contact-form__submit-button"
-            type="submit"
-            disabled={!formState.isValid}>
+          <button className="contact-form__submit-button" type="submit" disabled={!formState.isValid}>
             Send
           </button>
         </div>
